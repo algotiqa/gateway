@@ -25,9 +25,9 @@ THE SOFTWARE.
 package main
 
 import (
-	"github.com/tradalia/core/boot"
-	"github.com/tradalia/gateway/pkg/app"
-	"github.com/tradalia/gateway/pkg/service"
+	"github.com/algotiqa/core/boot"
+	"github.com/algotiqa/gateway/pkg/app"
+	"github.com/algotiqa/gateway/pkg/service"
 )
 
 //=============================================================================
@@ -40,7 +40,7 @@ func main() {
 	cfg := &app.Config{}
 	boot.ReadConfig(component, cfg)
 	logger := boot.InitLogger(component, &cfg.Application)
-	engine := boot.InitEngine(logger,    &cfg.Application)
+	engine := boot.InitEngine(logger, &cfg.Application)
 	service.Init(cfg, engine, logger)
 	boot.RunHttpServer(engine, &cfg.Application)
 }

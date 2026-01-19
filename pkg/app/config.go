@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 package app
 
-import "github.com/tradalia/core"
+import "github.com/algotiqa/core"
 
 //=============================================================================
 

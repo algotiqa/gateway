@@ -27,9 +27,6 @@ package service
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"github.com/tradalia/core"
-	"github.com/tradalia/gateway/pkg/app"
-	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
 	"net/http/httputil"
@@ -37,6 +34,10 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/algotiqa/core"
+	"github.com/algotiqa/gateway/pkg/app"
+	"github.com/gin-gonic/gin"
 )
 
 //=============================================================================
@@ -47,7 +48,7 @@ var transportCfg *http.Transport
 //=============================================================================
 
 func Init(cfg *app.Config, router *gin.Engine, logger *slog.Logger) {
-	gatewayCfg   = cfg
+	gatewayCfg = cfg
 	transportCfg = createHttpTransport(logger)
 	router.Use(handleUrl)
 }
@@ -57,22 +58,22 @@ func Init(cfg *app.Config, router *gin.Engine, logger *slog.Logger) {
 func createHttpTransport(logger *slog.Logger) *http.Transport {
 	cert, err := os.ReadFile("config/ca.crt")
 	if err != nil {
-		core.ExitWithMessage("Could not open certificate file: "+ err.Error())
+		core.ExitWithMessage("Could not open certificate file: " + err.Error())
 	}
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(cert)
 
 	certificate, err := tls.LoadX509KeyPair("config/client.crt", "config/client.key")
 	if err != nil {
-		core.ExitWithMessage("Could not load certificate: "+ err.Error())
+		core.ExitWithMessage("Could not load certificate: " + err.Error())
 	}
 
 	return &http.Transport{
 		TLSClientConfig: &tls.Config{
-				RootCAs:      caCertPool,
-				Certificates: []tls.Certificate{certificate},
-			},
-		}
+			RootCAs:      caCertPool,
+			Certificates: []tls.Certificate{certificate},
+		},
+	}
 }
 
 //=============================================================================
@@ -127,7 +128,7 @@ func proxy(targetURL string, c *gin.Context) {
 
 	proxy := httputil.NewSingleHostReverseProxy(target)
 	proxy.Transport = transportCfg
-	proxy.Director  = func(request *http.Request) {
+	proxy.Director = func(request *http.Request) {
 		request.URL.Scheme = target.Scheme
 		request.URL.Host = target.Host
 		request.URL.Path = target.Path
