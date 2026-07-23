@@ -24,9 +24,9 @@ routes:
   storage-manager:
     prefix: /api/storage
     url: https://algotiqa-server:8452/api/storage
-  doc-editor:
-    prefix: /doc-editor
-    url: http://algotiqa-server:8453/doc-editor
+  event-store:
+    prefix: /api/event
+    url: http://algotiqa-server:8453/api/event
   frontend:
     prefix: /
     url: http://algotiqa-server:8444
