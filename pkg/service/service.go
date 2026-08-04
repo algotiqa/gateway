@@ -27,13 +27,13 @@ import (
 
 //=============================================================================
 
-var gatewayCfg *app.Config
+var gatewayCfg   *app.Config
 var transportCfg *http.Transport
 
 //=============================================================================
 
 func Init(cfg *app.Config, router *gin.Engine, logger *slog.Logger) {
-	gatewayCfg = cfg
+	gatewayCfg   = cfg
 	transportCfg = createHttpTransport(logger)
 	router.Use(handleUrl)
 }
@@ -48,7 +48,7 @@ func createHttpTransport(logger *slog.Logger) *http.Transport {
 	caCertPool := x509.NewCertPool()
 	caCertPool.AppendCertsFromPEM(cert)
 
-	certificate, err := tls.LoadX509KeyPair("config/client.crt", "config/client.key")
+	certificate, err := tls.LoadX509KeyPair("config/server.crt", "config/server.key")
 	if err != nil {
 		core.ExitWithMessage("Could not load certificate: " + err.Error())
 	}
@@ -75,7 +75,7 @@ func handleUrl(c *gin.Context) {
 		return
 	}
 
-	proxy(targetURL, c)
+	proxyUrl(targetURL, c)
 	duration := time.Since(start)
 	slog.Info("Request served", "duration", duration.Seconds())
 }
@@ -103,7 +103,7 @@ func lookupTargetURL(path string) string {
 
 //=============================================================================
 
-func proxy(targetURL string, c *gin.Context) {
+func proxyUrl(targetURL string, c *gin.Context) {
 	target, err := url.Parse(targetURL)
 	if err != nil {
 		c.String(500, "Invalid target URL")
@@ -112,11 +112,12 @@ func proxy(targetURL string, c *gin.Context) {
 	}
 
 	proxy := httputil.NewSingleHostReverseProxy(target)
+
 	proxy.Transport = transportCfg
-	proxy.Director = func(request *http.Request) {
+	proxy.Director  = func(request *http.Request) {
 		request.URL.Scheme = target.Scheme
-		request.URL.Host = target.Host
-		request.URL.Path = target.Path
+		request.URL.Host   = target.Host
+		request.URL.Path   = target.Path
 	}
 
 	slog.Info("Forwarding request", "target", target)

@@ -3,30 +3,31 @@ application:
   production: false
   debug: false
 routes:
+# Remove access to keycloak management console redirecting to the UI
 #  keycloak-admin:
 #    prefix: /auth/admin
-#    url: http://algotiqa-server:8444
+#    url: http://algotiqa:8444
   keycloak:
     prefix: /auth
-    url: https://algotiqa-server:8448
+    url: https://keycloak:8448
   inventory-server:
     prefix: /api/inventory
-    url: https://algotiqa-server:8447/api/inventory
+    url: https://inventory-server:8447/api/inventory
   portfolio-trader:
     prefix: /api/portfolio
-    url: https://algotiqa-server:8445/api/portfolio
+    url: https://portfolio-trader:8445/api/portfolio
   system-adapter:
     prefix: /api/system
-    url: https://algotiqa-server:8449/api/system
+    url: https://system-adapter:8449/api/system
   data-collector:
     prefix: /api/collector
-    url: https://algotiqa-server:8446/api/collector
+    url: https://data-collector:8446/api/collector
   storage-manager:
     prefix: /api/storage
-    url: https://algotiqa-server:8452/api/storage
+    url: https://storage-manager:8452/api/storage
   event-store:
     prefix: /api/event
-    url: http://algotiqa-server:8453/api/event
+    url: https://event-store:8453/api/event
   frontend:
     prefix: /
-    url: http://algotiqa-server:8444
+    url: http://gui:8444
