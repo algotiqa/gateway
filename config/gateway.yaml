@@ -9,7 +9,7 @@ routes:
 #    url: http://algotiqa:8444
   keycloak:
     prefix: /auth
-    url: https://keycloak:8448
+    url: https://keycloak:8443
   inventory-server:
     prefix: /api/inventory
     url: https://inventory-server:8447/api/inventory
@@ -30,4 +30,4 @@ routes:
     url: https://event-store:8453/api/event
   frontend:
     prefix: /
-    url: http://gui:8444
+    url: http://gui:8080
