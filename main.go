@@ -10,9 +10,15 @@
 package main
 
 import (
+	"crypto/tls"
+	"log/slog"
+	"net/http"
+
+	"github.com/algotiqa/core"
 	"github.com/algotiqa/core/boot"
 	"github.com/algotiqa/gateway/pkg/app"
 	"github.com/algotiqa/gateway/pkg/service"
+	"github.com/gin-gonic/gin"
 )
 
 //=============================================================================
@@ -28,7 +34,25 @@ func main() {
 	logger := boot.InitLogger(component, version, &cfg.Application)
 	engine := boot.InitEngine(logger, &cfg.Application)
 	service.Init(cfg, engine, logger)
-	boot.RunHttpServer(engine, &cfg.Application)
+	runHttpServer(engine, &cfg.Application)
+}
+
+//=============================================================================
+
+func runHttpServer(router *gin.Engine, app *core.Application) {
+	slog.Info("Starting HTTPS server...")
+
+	tlsConfig := &tls.Config{}
+
+	server := &http.Server{
+		Addr     : app.BindAddress,
+		TLSConfig: tlsConfig,
+		Handler  : router,
+	}
+
+	slog.Info("Running")
+	err := server.ListenAndServeTLS("config/server.crt", "config/server.key")
+	core.ExitIfError(err)
 }
 
 //=============================================================================
