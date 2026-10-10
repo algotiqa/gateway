@@ -3,7 +3,7 @@ module github.com/algotiqa/gateway
 go 1.25.8
 
 require (
-	github.com/algotiqa/core v1.22.3
+	github.com/algotiqa/core v1.24.0
 	github.com/gin-gonic/gin v1.12.0
 )
 
