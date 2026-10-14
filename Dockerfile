@@ -6,13 +6,15 @@ FROM golang:1.25-alpine AS builder
 
 WORKDIR /app
 
+ARG VERSION=dev
+
 # Download dependencies first to leverage Docker layer caching
 COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy source code and compile statically
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.version={{.Version}}" -o /app/server .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X main.version=${VERSION}" -o /app/server .
 
 # ====================================================================
 # Stage 2: Create lightweight production image
